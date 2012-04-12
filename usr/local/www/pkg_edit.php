@@ -271,23 +271,7 @@ if ($pkg['custom_php_after_head_command'])
 <?php if($pkg['fields']['field'] <> "") { ?>
 <script language="JavaScript">
 <!--
-
-	window.onDomReady = DomReady;
-	function DomReady(fn) {
-		if(document.addEventListener) { //W3C
-			document.addEventListener("DOMContentLoaded", fn, false);
-		} else { // IE
-			document.onreadystatechange = function(){readyState(fn)}
-		}
-	}
-	function readyState(fn) {
-		//dom is ready for interaction
-		if(document.readyState == "complete") {
-			fn();
-		}
-	}
-								        
-	window.onDomReady(enablechange);
+	jQuery(document).ready(enablechange);
 
 function enablechange() {
 <?php
