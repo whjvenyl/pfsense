@@ -191,28 +191,22 @@ include("head.inc");
 <script language="javascript">
 
 function updateProtocol(m) {
-  // Default to HTTP
-  if (m == "") {
-    m = "http";
-  }
 	switch (m) {
-		case "dns": {
+		case "dns": 
 			jQuery('#type_row').hide();
 			jQuery('#tcp_options_row').hide();
 			jQuery('#ssl_options_row').hide();
 			jQuery('#direction_row').hide();
 			jQuery('#action_row').hide();
-			break;
-		}
-		case "tcp": {
+			break;		
+		case "tcp": 
 			jQuery('#type_row').hide();
 			jQuery('#tcp_options_row').show();
 			jQuery('#ssl_options_row').hide();
 			jQuery('#direction_row').hide();
 			jQuery('#action_row').hide();
 			break;
-		}
-		case "http": {
+		default: 
 			jQuery('#type_row').show();
 			jQuery('#tcp_options_row').hide();
 			jQuery('#ssl_options_row').show();
@@ -222,52 +216,43 @@ function updateProtocol(m) {
 			jQuery('#type_' + jQuery('#direction').val()).show();
 			jQuery('#action_row').show();
 <?php
-  /* Generate lots of .appear() entries for the action row select list
-   * based on what's been either preconfigured or "defaults"
-   * This really did have to be done in PHP.
-   */
-  if (isset($pconfig['type'])) {
-    $dtype = $pconfig['type'];
-    $ddir = $pconfig['direction'];
-  } else {
-    $dtype = "cookie";
-    $ddir = "request";
-  }
-	foreach ($actions['direction'][$ddir] as $type => $tv) {
-		foreach ($actions['direction'][$ddir][$type] as $action => $av ) {
-			if($dtype == $type) {
-				echo "jQuery('#{$ddir}_{$type}_{$action}').show();";
- 			}
-		}
-	}
+			/* Generate lots of .appear() entries for the action row select list
+			 * based on what's been either preconfigured or "defaults"
+			 * This really did have to be done in PHP.
+			 */
+			if (isset($pconfig['type'])) {
+			    	$dtype = $pconfig['type'];
+				$ddir = $pconfig['direction'];
+			} else {
+			    	$dtype = "cookie";
+				$ddir = "request";
+			}
+			foreach ($actions['direction'][$ddir] as $type => $tv) {
+				foreach ($actions['direction'][$ddir][$type] as $action => $av ) {
+					if($dtype == $type) {
+						echo "jQuery('#{$ddir}_{$type}_{$action}').show();";
+		 			}
+				}
+			}
 ?>
-
 			break;
-		}
 	}
 }
 
 function updateDirection(d) {
-  // Default to request
-  if (d == "") {
-    d = "request";
-  }
-
   switch (d) {
-    case "request": {
-      jQuery('#type_response').prop('disabled',true);
-      jQuery('#type_response').hide();
-      jQuery('#type_request').prop('disabled',false);
-      jQuery('#type_request').show();
-      break;
-    }
-    case "response": {
+    case "response": 
       jQuery('#type_request').prop('disabled',true);
       jQuery('#type_request').hide();
       jQuery('#type_response').prop('disabled',false);
       jQuery('#type_response').show();
       break;
-    }
+    default:
+      jQuery('#type_request').prop('disabled',false);
+      jQuery('#type_request').show();
+      jQuery('#type_response').prop('disabled',true);
+      jQuery('#type_response').hide();
+      break;	
   }
 }
 
@@ -283,14 +268,14 @@ function updateType(t){
 <?php
 	/* OK, so this is sick using php to generate javascript, but it needed to be done */
 	foreach ($types as $key => $val) {
-		echo "		case \"{$key}\": {\n";
+		echo "		case \"{$key}\": \n";
 		$t = $types;
 		foreach ($t as $k => $v) {
 			if ($k != $key) {
 				echo "			jQuery('#{$k}').hide();\n";
 			}
 		}
-		echo "		}\n";
+		echo "		break;\n";
 	}
 ?>
 	}
@@ -299,12 +284,8 @@ function updateType(t){
 
 
 function updateAction(a) {
-  // Default to change
-  if (a == "") {
-    a = "change";
-  }
   switch(a) {
-    case "append": {
+    case "append": 
       jQuery('#input_action_value').show();
       jQuery('#option_action_value').prop('disabled',false);
       jQuery('#input_action_key').show();
@@ -314,19 +295,7 @@ function updateAction(a) {
       jQuery('#action_action_value').html("&nbsp;to&nbsp;");
       jQuery('#action_action_id').html("");
       break;
-    }
-    case "change": {
-      jQuery('#input_action_value').show();
-      jQuery('#option_action_value').prop('disabled',false);
-      jQuery('#input_action_key').show();
-      jQuery('#option_action_key').prop('disabled',false);
-      jQuery('#input_action_id').hide();
-      jQuery('#option_action_id').prop('disabled',true);
-      jQuery('#action_action_value').html("&nbsp;of&nbsp;");
-      jQuery('#action_action_id').html("");
-      break;
-    }
-    case "expect": {
+    case "expect": 
       jQuery('#input_action_value').show();
       jQuery('#option_action_value').prop('disabled',false);
       jQuery('#input_action_key').show();
@@ -336,8 +305,7 @@ function updateAction(a) {
       jQuery('#action_action_value').html("&nbsp;from&nbsp;");
       jQuery('#action_action_id').html("");
       break;
-    }
-    case "filter": {
+    case "filter": 
       jQuery('#input_action_value').show();
       jQuery('#option_action_value').prop('disabled',false);
       jQuery('#input_action_key').show();
@@ -347,8 +315,7 @@ function updateAction(a) {
       jQuery('#action_action_value').html("&nbsp;from&nbsp;");
       jQuery('#action_action_id').html("");
       break;
-    }
-    case "hash": {
+    case "hash": 
       jQuery('#input_action_value').hide();
       jQuery('#option_action_value').prop('disabled',true);
       jQuery('#input_action_key').show();
@@ -358,8 +325,7 @@ function updateAction(a) {
       jQuery('#action_action_value').html("");
       jQuery('#action_action_id').html("");
       break;
-    }
-    case "log": {
+    case "log": 
       jQuery('#input_action_value').hide();
       jQuery('#option_action_value').prop('disabled',true);
       jQuery('#input_action_key').show();
@@ -369,8 +335,7 @@ function updateAction(a) {
       jQuery('#action_action_value').html("");
       jQuery('#action_action_id').html("");
       break;
-    }
-    case "mark": {
+    case "mark": 
       jQuery('#input_action_value').show();
       jQuery('#option_action_value').prop('disabled',false);
       jQuery('#input_action_key').show();
@@ -380,7 +345,16 @@ function updateAction(a) {
       jQuery('#action_action_value').html("&nbsp;from&nbsp;");
       jQuery('#action_action_id').html("&nbsp;with&nbsp;");
       break;
-    }
+    default:
+      jQuery('#input_action_value').show();
+      jQuery('#option_action_value').prop('disabled',false);
+      jQuery('#input_action_key').show();
+      jQuery('#option_action_key').prop('disabled',false);
+      jQuery('#input_action_id').hide();
+      jQuery('#option_action_id').prop('disabled',true);
+      jQuery('#action_action_value').html("&nbsp;of&nbsp;");
+      jQuery('#action_action_id').html("");
+      break;
   }
 }
 
